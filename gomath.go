@@ -2,7 +2,6 @@ package gomath
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"reflect"
 	"strconv"
@@ -18,14 +17,14 @@ func MaxFloat(a, b interface{}) (float64, error) {
 	if aValue.CanConvert(reflect.TypeOf(float64(aFloat64))) {
 		aFloat64 = aValue.Convert(reflect.TypeOf(aFloat64)).Float()
 	} else {
-		return 0, errors.New("类型错误")
+		return 0, ErrValueType
 	}
 
 	bValue := reflect.ValueOf(b)
 	if bValue.CanConvert(reflect.TypeOf(bFloat64)) {
 		bFloat64 = bValue.Convert(reflect.TypeOf(bFloat64)).Float()
 	} else {
-		return 0, errors.New("类型错误")
+		return 0, ErrValueType
 	}
 
 	if aFloat64 < bFloat64 {
@@ -44,14 +43,14 @@ func MaxInt(a, b interface{}) (int64, error) {
 	if aValue.CanConvert(reflect.TypeOf(aInt)) {
 		aInt = aValue.Convert(reflect.TypeOf(aInt)).Int()
 	} else {
-		return 0, errors.New("a: 类型错误")
+		return 0, ErrValueType
 	}
 
 	bValue := reflect.ValueOf(b)
 	if bValue.CanConvert(reflect.TypeOf(bInt)) {
 		bInt = bValue.Convert(reflect.TypeOf(bInt)).Int()
 	} else {
-		return 0, errors.New("b: 类型错误")
+		return 0, ErrValueType
 	}
 
 	if aInt > bInt {
@@ -71,14 +70,14 @@ func MinFloat(a, b interface{}) (float64, error) {
 	if aValue.CanConvert(reflect.TypeOf(float64(aFloat64))) {
 		aFloat64 = aValue.Convert(reflect.TypeOf(aFloat64)).Float()
 	} else {
-		return 0, errors.New("类型错误")
+		return 0, ErrValueType
 	}
 
 	bValue := reflect.ValueOf(b)
 	if bValue.CanConvert(reflect.TypeOf(bFloat64)) {
 		bFloat64 = bValue.Convert(reflect.TypeOf(bFloat64)).Float()
 	} else {
-		return 0, errors.New("类型错误")
+		return 0, ErrValueType
 	}
 
 	if aFloat64 < bFloat64 {
@@ -97,14 +96,14 @@ func MinInt(a, b interface{}) (int64, error) {
 	if aValue.CanConvert(reflect.TypeOf(aInt)) {
 		aInt = aValue.Convert(reflect.TypeOf(aInt)).Int()
 	} else {
-		return 0, errors.New("a: 类型错误")
+		return 0, ErrValueType
 	}
 
 	bValue := reflect.ValueOf(b)
 	if bValue.CanConvert(reflect.TypeOf(bInt)) {
 		bInt = bValue.Convert(reflect.TypeOf(bInt)).Int()
 	} else {
-		return 0, errors.New("b: 类型错误")
+		return 0, ErrValueType
 	}
 
 	if aInt > bInt {
@@ -123,7 +122,7 @@ func RoundFloat(source interface{}, decimal int) (dest float64, err error) {
 	if sourceValue.CanConvert(reflect.TypeOf(float64(dest))) {
 		destTemp = sourceValue.Convert(reflect.TypeOf(float64(dest))).Float()
 	} else {
-		return 0, errors.New("非数值类型不能执行该操作")
+		return 0, ErrValueType
 	}
 	dest, err = strconv.ParseFloat(fmt.Sprintf(fmt.Sprintf("%%.%df", decimal), destTemp), 64)
 	return
@@ -133,7 +132,7 @@ func RoundFloat(source interface{}, decimal int) (dest float64, err error) {
 func ArrayToInt(source []int) (result int, err error) {
 	for _, v := range source {
 		if v > 31 || v == 0 {
-			return 0, errors.New("类型越界")
+			return 0, ErrOutOfIndex
 		}
 		result += 1 << v
 	}
